@@ -8,6 +8,7 @@ import com.imooc.dataobject.ProductInfo;
 import com.imooc.enums.ProductStatusEnum;
 import com.imooc.service.CategoryService;
 import com.imooc.service.ProductService;
+import com.imooc.util.ResultVOUtil;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,28 +50,34 @@ public class BuyerProductController {
         // productVOList中的每个productVO中都有一个productInfoVOList，两层的list
         List<ProductVO> productVOList = new ArrayList<>();
         for (ProductCategory productCategory: productCategoryList) {
-//            ProductInfo productInfo = new ProductInfo();
             ProductVO productVO = new ProductVO();
             productVO.setCategoryName(productCategory.getCategoryName());
             productVO.setCategoryType(productCategory.getCategoryType());
-            List<ProductInfoVO> productInfoVOList = new ArrayList<>();
-            for (ProductInfo productInfo : productInfoList) {
-                // 如果当前商品的类别和当前种类相同，则添加到productInfoVOList中
-                if (productInfo.getCategoryType().equals(productCategory.getCategoryType())) {
-                    ProductInfoVO productInfoVO = new ProductInfoVO();
-                    BeanUtils.copyProperties(productInfo, productInfoVO);// 该方法能快速拷贝属性
-                    productInfoVOList.add(productInfoVO);
-                }
-            }
+
+            List<ProductInfoVO> productInfoVOList = productInfoList.stream().
+                    filter(productInfo -> productInfo.getCategoryType().equals(productCategory.getCategoryType())).
+                    map(productInfo -> {
+                ProductInfoVO productInfoVO = new ProductInfoVO();
+                BeanUtils.copyProperties(productInfo, productInfoVO);
+                return productInfoVO;
+            }).collect(Collectors.toList());
+
+//            for (ProductInfo productInfo : productInfoList) {
+//                // 如果当前商品的类别和当前种类相同，则添加到productInfoVOList中
+//                if (productInfo.getCategoryType().equals(productCategory.getCategoryType())) {
+//                    ProductInfoVO productInfoVO = new ProductInfoVO();
+//                    BeanUtils.copyProperties(productInfo, productInfoVO);// 该方法能快速拷贝属性
+//                    productInfoVOList.add(productInfoVO);
+//                }
+//            }
             productVO.setProductInfoVOList(productInfoVOList);
             productVOList.add(productVO);
 
         }
 
-        ResultVO resultVO = new ResultVO();
-        resultVO.setCode(0);
-        resultVO.setMsg("成功");
-        resultVO.setData(productVOList);
-        return resultVO;
+
+        return ResultVOUtil.success(productVOList);
     }
+
+
 }
