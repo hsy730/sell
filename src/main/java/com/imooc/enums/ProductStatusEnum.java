@@ -12,7 +12,8 @@ public enum ProductStatusEnum {
     /**已上架*/
     UP(0,"已上架"),
     /**已下架*/
-    DOWN(1,"已下架");
+    DOWN(1,"已下架")
+    ;
     /**状态码*/
     private Integer code;
     /**状态信息*/
