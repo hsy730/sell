@@ -2,10 +2,13 @@ package com.imooc.service.impl;
 
 import com.imooc.dataobject.OrderDetail;
 import com.imooc.datatransferobject.OrderDTO;
+import com.imooc.enums.OrderStatusEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -47,18 +50,32 @@ public class OrderServiceImplTest {
 
     @Test
     public void findOne() {
+        String orderId = "1580134149048559493";
+        OrderDTO orderDTO = orderService.findOne(orderId);
+        System.out.println("结果:"+orderDTO);
+        assertEquals(orderId, orderDTO.getOrderId());
     }
 
     @Test
     public void list() {
+        Page<OrderDTO> orderDTOPage = orderService.findList("123456", PageRequest.of(0, 2));
+        assertNotEquals(0, orderDTOPage.getTotalElements());
     }
 
     @Test
     public void cancel() {
+        String orderId = "1580134149048559493";
+        OrderDTO orderDTO = orderService.findOne(orderId);
+        OrderDTO result = orderService.cancel(orderDTO);
+        assertEquals(OrderStatusEnum.CANCEL.getCode(), result.getOrderStatus());
     }
 
     @Test
     public void finish() {
+        String orderId = "1580134149048559493";
+        OrderDTO orderDTO = orderService.findOne(orderId);
+        OrderDTO result = orderService.finish(orderDTO);
+        assertEquals(OrderStatusEnum.FINISH.getCode(), result.getOrderStatus());
     }
 
     @Test
