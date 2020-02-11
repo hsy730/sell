@@ -11,12 +11,19 @@ spring:
     username: root
     password: 123456
 #    url: jdbc:mysql://172.20.10.7/sell?characterEncoding=utf-8&useSSL=false
-    url: jdbc:mysql://192.168.0.107/sell?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://192.168.0.106/sell?characterEncoding=utf-8&useSSL=false
 
   #    192.168.0.105     172.20.10.7
 
   jpa:
       show-sql: true
+  jackson:
+#    如果数据字段为空就不返回
+    default-property-inclusion: non_null
 server:
   servlet:
     context-path: /sell
+
+wechat:
+  mpAppId: wxce651dd15b15bf59
+  mpAppSecret: e63124130d5656261bdee71841cbaad9

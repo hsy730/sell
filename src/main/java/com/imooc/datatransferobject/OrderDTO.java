@@ -1,6 +1,9 @@
 package com.imooc.datatransferobject;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.imooc.dataobject.OrderDetail;
+import com.imooc.util.serializer.Date2LongSerializer;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,6 +18,8 @@ import java.util.List;
  * @date 2020-01-27 16:20
  */
 @Data
+// 改为在配置文件中配置
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDTO {
     /**订单id*/
     private String orderId;
@@ -33,8 +38,10 @@ public class OrderDTO {
     /**支付状态，默认为 0 未支付*/
     private Integer payStatus;
     /**创建时间*/
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date createTime;
     /**更新时间*/
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date updateTime;
     /**订单详情列表*/
     private List<OrderDetail> orderDetailList;

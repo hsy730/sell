@@ -62,6 +62,7 @@ public class BuyerProductController {
                 return productInfoVO;
             }).collect(Collectors.toList());
 
+//            List<ProductInfoVO> productInfoVOList = new ArrayList<>();
 //            for (ProductInfo productInfo : productInfoList) {
 //                // 如果当前商品的类别和当前种类相同，则添加到productInfoVOList中
 //                if (productInfo.getCategoryType().equals(productCategory.getCategoryType())) {
@@ -74,8 +75,6 @@ public class BuyerProductController {
             productVOList.add(productVO);
 
         }
-
-
         return ResultVOUtil.success(productVOList);
     }
 

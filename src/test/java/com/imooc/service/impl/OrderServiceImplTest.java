@@ -3,6 +3,7 @@ package com.imooc.service.impl;
 import com.imooc.dataobject.OrderDetail;
 import com.imooc.datatransferobject.OrderDTO;
 import com.imooc.enums.OrderStatusEnum;
+import com.imooc.enums.PayStatusEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +81,9 @@ public class OrderServiceImplTest {
 
     @Test
     public void paid() {
+        String orderId = "1580134149048559493";
+        OrderDTO orderDTO = orderService.findOne(orderId);
+        OrderDTO result = orderService.paid(orderDTO);
+        assertEquals(PayStatusEnum.PAID.getCode(), result.getPayStatus());
     }
 }
