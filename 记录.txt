@@ -1,0 +1,52 @@
+vim /usr/local/nginx/conf/nginx.conf   
+1. 按i键进入文本输入模式，
+2. 修改完成，按esc键退出修改模式，进入命令模式，输入:wq，保存退出
+3. 重置配置，使修改生效，nginx -s reload
+
+
+修改本机假域名 sell.com
+https://blog.csdn.net/qq_36940798/article/details/84951220
+
+
+注意要同时修改
+虚拟机里配置文件ip=本机ip
+本机的假域名sell.com ip=虚拟机的ip
+才能以sell.com访问,
+个人理解： 访问sell.com时，会先访问前端（虚拟机中运行），再访问后端（本机中运行），
+因此sell.com的ip因该为虚拟机的ip，而虚拟机配置的后端ip应该为本机ip
+
+
+
+电脑  	192.168.0.102
+路由器 	192.168.0.1
+手机 	192.168.0.100
+
+fiddle抓包
+
+GET /sell/wechat/authorize?returnUrl=http://sell.springboot.cn/openid.html HTTP/1.1
+授权
+Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd898fcb01713c658&redirect_uri=http%3A%2F%2Fsell.springboot.cn%2Fsell%2Fwechat%2FuserInfo&response_type=code&scope=snsapi_base&state=http%3A%2F%2Fsell.springboot.cn%2Fopenid.html#wechat_redirect
+重定向，拿到code
+GET /sell/wechat/userInfo?code=081q2eYi0juQ9r1hZxXi0ygUXi0q2eYK&state=http%3A%2F%2Fsell.springboot.cn%2Fopenid.html HTTP/1.1
+最终拿到openid
+Location: http://sell.springboot.cn/openid.html?openid=oTgZpwWtUa0U2d09Od0G8NQ0F1ls
+
+
+openid是微信用户在公众号appid下的唯一标识，appid不同，则openid不同
+
+http://xhsj.natapp1.cc
+
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce651dd15b15bf59&redirect_uri=http://xhsj.natapp1.cc/sell/weixin/auth&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect
+
+https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxce651dd15b15bf59&secret=e63124130d5656261bdee71841cbaad9&code=CODE&grant_type=authorization_code
+
+{"access_token":"30_BNZ5vsj_JxIkvl5lAK5phPXz04KX2eYqKeqpafisLIHDPr0Pbi-0RANKrkf9FqCrujNOh3rFWFBqCRZZyXnOTOF50aCde8iADEHwhDVFCZQ","expires_in":7200,"refresh_token":"30_qWCyX7t3fMP9CSRH9CtK8p795wEw-UghuUO8xb7De2wr6cQbZXgd481TeRfWXNx_w2Do15bUdu3OlwvJO3nEebu-JHYCGtJBVpodoYIaJVM","openid":"oLZLkwQc6Z-yUVjLxz1-Z9U2CSS8","scope":"snsapi_base"}
+
+
+weixin-java-mp， 廖师兄用的是2.7.0，我用的是3.6.0
+
+
+配置前端重定向位置，目录 opt/code/sell_fe_buyer/config/index.js, 
+修改完成后在前端根目录sell_fe_buyer下重新构建，npm run build
+构建完成后，文件保存在sell_fe_buyer/dist目录下。
+将该目录下文件拷贝到网站根目录下：cp -r dist/* /opt/data/wwwroot/sell/
